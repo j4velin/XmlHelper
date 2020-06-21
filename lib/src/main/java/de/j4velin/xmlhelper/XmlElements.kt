@@ -38,7 +38,10 @@ data class XmlObject(
     override val name: String,
     override val attributes: Map<String, String>,
     val values: Map<String, XmlElement>
-) : XmlElement(name, attributes)
+) : XmlElement(name, attributes) {
+    val size = values.size
+    operator fun get(name: String) = values[name]
+}
 
 /**
  * A XML list/array. Special case of a XML object in which all enclosed tags have the same name
@@ -47,4 +50,7 @@ data class XmlList(
     override val name: String,
     override val attributes: Map<String, String>,
     val values: List<XmlElement>
-) : XmlElement(name, attributes)
+) : XmlElement(name, attributes) {
+    val size = values.size
+    operator fun get(index: Int) = values[index]
+}
