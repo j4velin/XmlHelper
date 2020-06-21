@@ -7,7 +7,7 @@ import org.xmlpull.v1.XmlPullParser
  */
 internal fun readTag(parser: XmlPullParser): XmlElement {
     if (parser.depth == 0) {
-        parser.nextTag()
+        parser.next()
     }
     if (parser.eventType != XmlPullParser.START_TAG) {
         throw IllegalArgumentException("Not a start tag: ${parser.eventType}")

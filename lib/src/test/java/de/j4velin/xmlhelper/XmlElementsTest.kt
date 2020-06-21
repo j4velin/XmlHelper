@@ -130,7 +130,6 @@ class XmlElementsTest {
         val file = File(javaClass.classLoader!!.getResource("objectOfPrimitives.xml").file)
         FileInputStream(file).use {
             val obj = XmlElement.fromInputStream(it)
-            println(obj)
             assertTrue(obj is XmlObject)
             assertEquals("myObject", obj.name)
             assertTrue(obj.attributes.isEmpty())

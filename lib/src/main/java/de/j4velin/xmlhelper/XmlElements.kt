@@ -3,6 +3,7 @@ package de.j4velin.xmlhelper
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
+import java.io.InputStreamReader
 
 /**
  * Base class for all XML element types
@@ -16,7 +17,7 @@ sealed class XmlElement(open val name: String, open val attributes: Map<String, 
             stream.use { inputStream ->
                 val parser: XmlPullParser = XmlPullParserFactory.newInstance().newPullParser()
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-                parser.setInput(inputStream, null)
+                parser.setInput(InputStreamReader(inputStream))
                 readTag(parser)
             }
     }
