@@ -1,0 +1,16 @@
+<myList>
+    <myInnerList>
+        <myPrimitive>foo</myPrimitive>
+        <myPrimitive>bar</myPrimitive>
+    </myInnerList>
+
+    <myInnerList>
+        <myPrimitive>foo2</myPrimitive>
+        <myPrimitive>bar2</myPrimitive>
+    </myInnerList>
+
+    <myInnerList>
+        <myPrimitive>foo3</myPrimitive>
+        <myPrimitive>bar3</myPrimitive>
+    </myInnerList>
+</myList>

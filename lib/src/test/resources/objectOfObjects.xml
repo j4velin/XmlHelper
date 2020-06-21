@@ -1,0 +1,17 @@
+<myObject>
+    <myPrimitive>foobar</myPrimitive>
+    <myInnerObject>
+        <myInnerObjectPrimitive>foo</myInnerObjectPrimitive>
+        <myInnerObjectList>
+            <myInnerObjectListItem>abc</myInnerObjectListItem>
+            <myInnerObjectListItem>def</myInnerObjectListItem>
+            <myInnerObjectListItem>ghi</myInnerObjectListItem>
+        </myInnerObjectList>
+        <myInnerObjectEmpty />
+    </myInnerObject>
+    <myList>
+        <myListItem>foo</myListItem>
+        <myListItem>bar</myListItem>
+    </myList>
+    <myEmpty />
+</myObject>

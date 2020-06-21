@@ -1,0 +1,4 @@
+<myObject>
+    <myStringPrimitive>foobar</myStringPrimitive>
+    <myEmptyPrimitive />
+</myObject>
