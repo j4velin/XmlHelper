@@ -37,11 +37,8 @@ data class XmlPrimitive(
 data class XmlObject(
     override val name: String,
     override val attributes: Map<String, String>,
-    val values: Map<String, XmlElement>
-) : XmlElement(name, attributes) {
-    val size = values.size
-    operator fun get(name: String) = values[name]
-}
+    val elements: Map<String, XmlElement>
+) : XmlElement(name, attributes), Map<String, XmlElement> by elements
 
 /**
  * A XML list/array. Special case of a XML object in which all enclosed tags have the same name
@@ -49,8 +46,5 @@ data class XmlObject(
 data class XmlList(
     override val name: String,
     override val attributes: Map<String, String>,
-    val values: List<XmlElement>
-) : XmlElement(name, attributes) {
-    val size = values.size
-    operator fun get(index: Int) = values[index]
-}
+    val elements: List<XmlElement>
+) : XmlElement(name, attributes), List<XmlElement> by elements

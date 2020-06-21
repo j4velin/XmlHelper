@@ -1,6 +1,6 @@
 package de.j4velin.xmlhelper
 
-import junit.framework.Assert.*
+import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
 import java.io.FileInputStream
@@ -65,7 +65,7 @@ class XmlElementsTest {
             assertEquals("myList", list.name)
             assertTrue(list.attributes.isEmpty())
             assertEquals(3, (list as XmlList).size)
-            for (primitive in list.values) {
+            for (primitive in list) {
                 assertTrue(primitive is XmlPrimitive)
                 assertEquals("myPrimitive", primitive.name)
             }
@@ -84,7 +84,7 @@ class XmlElementsTest {
             assertEquals("myList", list.name)
             assertTrue(list.attributes.isEmpty())
             assertEquals(3, (list as XmlList).size)
-            for (primitive in list.values) {
+            for (primitive in list) {
                 assertTrue(primitive is XmlPrimitive)
                 assertEquals("myPrimitive", primitive.name)
             }
@@ -103,10 +103,10 @@ class XmlElementsTest {
             assertEquals("myList", list.name)
             assertTrue(list.attributes.isEmpty())
             assertEquals(3, (list as XmlList).size)
-            for (list in list.values) {
-                assertTrue(list is XmlList)
-                assertEquals("myInnerList", list.name)
-                assertEquals(2, (list as XmlList).size)
+            for (innerList in list) {
+                assertTrue(innerList is XmlList)
+                assertEquals("myInnerList", innerList.name)
+                assertEquals(2, (innerList as XmlList).size)
             }
             val primitive00 = (list[0] as XmlList)[0] as XmlPrimitive
             assertEquals("foo", primitive00.value)
@@ -135,7 +135,7 @@ class XmlElementsTest {
             assertEquals("myObject", obj.name)
             assertTrue(obj.attributes.isEmpty())
             assertEquals(2, (obj as XmlObject).size)
-            for (primitive in obj.values.values) {
+            for (primitive in obj.values) {
                 assertTrue(primitive is XmlPrimitive)
             }
             assertEquals("foobar", (obj["myStringPrimitive"] as XmlPrimitive).value)
