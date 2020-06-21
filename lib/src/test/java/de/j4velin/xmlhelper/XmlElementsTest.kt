@@ -4,6 +4,7 @@ import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
 import java.io.FileInputStream
+import java.io.StringReader
 
 class XmlElementsTest {
 
@@ -140,6 +141,34 @@ class XmlElementsTest {
             assertEquals("foobar", (obj["myStringPrimitive"] as XmlPrimitive).value)
             assertNull((obj["myEmptyPrimitive"] as XmlPrimitive).value)
         }
+    }
+
+    @Test
+    fun fromReader() {
+        val xml = """
+            <someTag someAttribute="foobar">
+                <somePrimitive>primitiveValue</somePrimitive>
+                <withoutValue />
+                <stringList foo="bar">
+                    <stringElement>hello</stringElement>
+                    <stringElement>world</stringElement>
+                </stringList>
+            </someTag>
+            """
+        val xmlObject = XmlElement.fromReader(StringReader(xml)) as XmlObject
+
+        assertEquals("someTag", xmlObject.name)
+        assertEquals("foobar", xmlObject.attributes["someAttribute"])
+
+        val xmlPrimitive = xmlObject["somePrimitive"] as XmlPrimitive
+        assertEquals("primitiveValue", xmlPrimitive.value)
+
+        assertNull((xmlObject["withoutValue"] as XmlPrimitive).value)
+
+        val xmlList = xmlObject["stringList"] as XmlList
+        assertEquals(2, xmlList.size)
+        assertEquals("hello", (xmlList[0] as XmlPrimitive).value)
+        assertEquals("world", (xmlList[1] as XmlPrimitive).value)
     }
 
 

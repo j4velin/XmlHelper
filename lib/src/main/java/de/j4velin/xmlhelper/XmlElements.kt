@@ -4,6 +4,7 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.io.Reader
 
 /**
  * Base class for all XML element types
@@ -13,13 +14,17 @@ sealed class XmlElement(open val name: String, open val attributes: Map<String, 
         /**
          * Creates a XmlEntity from an inputstream
          */
-        fun fromInputStream(stream: InputStream): XmlElement =
-            stream.use { inputStream ->
-                val parser: XmlPullParser = XmlPullParserFactory.newInstance().newPullParser()
-                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-                parser.setInput(InputStreamReader(inputStream))
-                readTag(parser)
-            }
+        fun fromInputStream(stream: InputStream) = stream.use { fromReader(InputStreamReader(it)) }
+
+        /**
+         * Creates a XmlEntity from a reader
+         */
+        fun fromReader(reader: Reader) = reader.use {
+            val parser: XmlPullParser = XmlPullParserFactory.newInstance().newPullParser()
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+            parser.setInput(it)
+            readTag(parser)
+        }
     }
 }
 
