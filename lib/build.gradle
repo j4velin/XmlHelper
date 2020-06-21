@@ -32,7 +32,7 @@ afterEvaluate {
 
                 pom {
                     name = libName
-                    description = 'Android Library for applications to send events to the led_server'
+                    description = 'Kotlin library for handling XML'
                     url = siteUrl
                     packaging = 'aar'
                     licenses {
@@ -83,7 +83,7 @@ if (rootProject.file("local.properties").exists()) {
 // https://github.com/bintray/gradle-bintray-plugin
 version = versionStr
 bintray {
-    dryRun = true
+    dryRun = false
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
 
