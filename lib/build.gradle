@@ -2,7 +2,7 @@ apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
-def versionStr = '1.0.0'
+def versionStr = '1.0.1'
 def libName = 'XmlHelper'
 def siteUrl = 'https://github.com/j4velin/XmlHelper'    // Homepage URL of the library
 def gitUrl = 'https://github.com/j4velin/XmlHelper.git' // Git repository URL
