@@ -1,7 +1,6 @@
 package de.j4velin.xmlhelper
 
 import org.xmlpull.v1.XmlPullParser
-import javax.xml.crypto.dsig.XMLObject
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.primaryConstructor
@@ -52,6 +51,77 @@ internal fun readTag(parser: XmlPullParser): XmlElement {
 
     return element
 }
+
+@RequiresOptIn(
+    message = "This feature is experimental and only works for selected data types",
+    level = RequiresOptIn.Level.WARNING
+)
+@Retention(AnnotationRetention.BINARY)
+@Target(AnnotationTarget.FUNCTION)
+annotation class ToDataClass
+
+/**
+ * Tries to construct an instance of the data class 'c' with the data given in 'xml'.
+ *
+ * This method only works if 'c' is a Kotlin data class with properties being primitives, other data
+ * classes or of type List<String>. Options to provide custom deserializer code for other types might
+ * be added at some point.
+ */
+@ToDataClass
+fun <T : Any> toDataClass(c: KClass<T>, xml: XmlElement): T {
+    if (!c.isData)
+        throw java.lang.IllegalArgumentException(
+            "Only data classes are supported in this version. Problematic class: ${c.qualifiedName}"
+        )
+    val parameterList = c.primaryConstructor!!.parameters
+    val ctorValuesMap = HashMap<KParameter, Any?>(parameterList.size)
+
+    for (parameter in parameterList) {
+        val name = parameter.name
+        val classifier = parameter.type.classifier as KClass<*>
+        if (xml is XmlObject && xml.containsKey(name)) {
+            ctorValuesMap[parameter] = getObject(classifier, xml[name]!!)
+        } else if (xml.attributes.containsKey(name)) {
+            ctorValuesMap[parameter] = getPrimitive(classifier, xml.attributes[name])
+        }
+    }
+
+    return c.primaryConstructor!!.callBy(ctorValuesMap)
+
+}
+
+/**
+ * Converts the given string into to given primitive class object
+ */
+private fun getPrimitive(c: KClass<*>, value: String?) = when (c) {
+    String::class -> value.toString()
+    Boolean::class -> value?.toBoolean()
+    Byte::class -> value?.toByte()
+    Short::class -> value?.toShort()
+    Int::class -> value?.toInt()
+    Long::class -> value?.toLong()
+    Float::class -> value?.toFloat()
+    Double::class -> value?.toDouble()
+    else -> throw IllegalArgumentException("Unknown primitive type: ${c.qualifiedName}")
+}
+
+/**
+ * Tries to convert the given XML element into the given class. Should work for data classes,
+ * primitives and list of strings
+ */
+@ToDataClass
+private fun getObject(c: KClass<*>, xml: XmlElement) =
+    when (xml) {
+        is XmlObject -> toDataClass(c, xml)
+        is XmlPrimitive -> {
+            if (c == String::class || c.javaPrimitiveType != null) {
+                getPrimitive(c, xml.value)
+            } else {
+                toDataClass(c, xml)
+            }
+        }
+        is XmlList -> xml.elements.filterIsInstance<XmlPrimitive>().map { it.value }
+    }
 
 /**
  * Skips all whitespaces and returns the next non-whitespace token

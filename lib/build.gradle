@@ -10,6 +10,7 @@ def group = 'de.j4velin.XmlHelper'                      // Maven Group ID for th
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation fileTree(dir: "libs", include: ["*.jar"])
     testImplementation 'junit:junit:4.12'
     testImplementation fileTree(dir: "testLibs", include: ["*.jar"])
