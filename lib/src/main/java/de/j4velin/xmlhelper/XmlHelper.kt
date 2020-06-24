@@ -1,6 +1,10 @@
 package de.j4velin.xmlhelper
 
 import org.xmlpull.v1.XmlPullParser
+import javax.xml.crypto.dsig.XMLObject
+import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
+import kotlin.reflect.full.primaryConstructor
 
 /**
  * Reads the tag, to which the given parser points and created the corresponding XmlElement
@@ -29,11 +33,12 @@ internal fun readTag(parser: XmlPullParser): XmlElement {
                 elements.add(readTag(parser))
                 parser.next()
             } while (skipWhitespace(parser) != XmlPullParser.END_TAG)
-            val firstElementName = elements.first().name
-            if (elements.all { it.name == firstElementName }) {
-                XmlList(name, attributes, elements)
+
+            // all enclosed tags have a different name? -> map/object
+            if (elements.map { it.name }.distinct().size == elements.size) {
+                XmlObject(name, attributes, elements.map { it.name to it }.toMap())
             } else {
-                XmlObject(name, attributes, elements.map { Pair(it.name, it) }.toMap())
+                XmlListImpl(name, attributes, elements)
             }
         }
         else -> throw IllegalArgumentException("Unexpected type: $token")

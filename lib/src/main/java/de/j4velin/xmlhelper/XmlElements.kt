@@ -38,19 +38,31 @@ data class XmlPrimitive(
 ) : XmlElement(name, attributes)
 
 /**
- * A XML object, e.g. a tag enclosing multiple other tags
+ * Special case of a XmlContainer where all enclosing tags have a different name
  */
 data class XmlObject(
     override val name: String,
     override val attributes: Map<String, String>,
-    val elements: Map<String, XmlElement>
-) : XmlElement(name, attributes), Map<String, XmlElement> by elements
+    val map: Map<String, XmlElement>
+) : XmlList(name, attributes, map.values.toList()), Map<String, XmlElement> by map {
+    override fun isEmpty() = map.isEmpty()
+    override val size = map.size
+}
 
 /**
- * A XML list/array. Special case of a XML object in which all enclosed tags have the same name
+ * A XML list/array, e.g. a tag enclosing multiple other tags
  */
-data class XmlList(
+internal data class XmlListImpl(
     override val name: String,
     override val attributes: Map<String, String>,
-    val elements: List<XmlElement>
+    override val elements: List<XmlElement>
+) : XmlList(name, attributes, elements)
+
+/**
+ * Workaround for not being able to subclass a Kotlin data class
+ */
+sealed class XmlList(
+    override val name: String,
+    override val attributes: Map<String, String>,
+    open val elements: List<XmlElement>
 ) : XmlElement(name, attributes), List<XmlElement> by elements

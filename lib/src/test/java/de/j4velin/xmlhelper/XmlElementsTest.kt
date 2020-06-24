@@ -171,6 +171,18 @@ class XmlElementsTest {
         assertEquals("world", (xmlList[1] as XmlPrimitive).value)
     }
 
+    @Test
+    fun xmlObjectIsAlsoAList() {
+        val file = File(javaClass.classLoader!!.getResource("objectOfPrimitives.xml").file)
+        FileInputStream(file).use {
+            val obj = XmlElement.fromInputStream(it)
+            assertTrue(obj is XmlList)
+            assertTrue(obj is XmlObject)
+            // smartcast not working on first call?
+            assertEquals((obj as XmlObject)["myStringPrimitive"], obj[0])
+            assertEquals(obj["myEmptyPrimitive"], obj[1])
+        }
+    }
 
     @Test
     fun objectOfObjects() {
