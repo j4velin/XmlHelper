@@ -1,5 +1,6 @@
-package de.j4velin.xmlhelper
+package de.j4velin.xmlhelper.databinding
 
+import de.j4velin.xmlhelper.XmlElement
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.StringReader
@@ -32,8 +33,10 @@ class ToDataClassTest {
                 </tires>
             </car>
             """
-        val xmlObject = XmlElement.fromReader(StringReader(xml))
-        val car: Car = toDataClass(Car::class, xmlObject)
+        val xmlObject =
+            XmlElement.fromReader(StringReader(xml))
+        val car: Car = toDataClass(
+            Car::class, xmlObject)
 
         assertEquals("A-BC 4242", car.licensePlate)
         assertEquals("Max Mustermann", car.driver.name)
@@ -44,7 +47,8 @@ class ToDataClassTest {
     @Test
     fun driverFromAttributes() {
         val xml = """<driver name="Max Mustermann" age="42" />"""
-        val xmlObject = XmlElement.fromReader(StringReader(xml))
+        val xmlObject =
+            XmlElement.fromReader(StringReader(xml))
         val driver = toDataClass(Driver::class, xmlObject)
         assertEquals("Max Mustermann", driver.name)
         assertEquals(42, driver.age)
