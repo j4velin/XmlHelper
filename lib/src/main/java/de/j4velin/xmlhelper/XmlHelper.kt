@@ -19,6 +19,9 @@ import org.xmlpull.v1.XmlPullParser
 
 /**
  * Reads the tag, to which the given parser points and created the corresponding XmlElement
+ *
+ * @param parser the xml parser to read from
+ * @return a XmlElement
  */
 internal fun readTag(parser: XmlPullParser): XmlElement {
     if (parser.depth == 0) {

@@ -29,6 +29,9 @@ import kotlin.reflect.full.primaryConstructor
 )
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.FUNCTION)
+/**
+ * Annotates an experimental feature that only works for selected data types
+ */
 annotation class ToDataClass
 
 /**
@@ -37,6 +40,11 @@ annotation class ToDataClass
  * This method only works if 'c' is a Kotlin data class with properties being primitives, other data
  * classes or of type List<String>. Options to provide custom deserializer code for other types might
  * be added at some point.
+ *
+ * @param c the data class to serialize into
+ * @param xml the xml source
+ *
+ * @return a kotlin data class representing the given xml element
  */
 @ToDataClass
 fun <T : Any> toDataClass(c: KClass<T>, xml: XmlElement): T {
@@ -63,6 +71,11 @@ fun <T : Any> toDataClass(c: KClass<T>, xml: XmlElement): T {
 /**
  * Tries to convert the given XML element into the given class. Should work for data classes,
  * primitives and list of strings
+ *
+ * @param c the target class
+ * @param xml the source xml data
+ *
+ * @return an object of type 'c' representing the data of 'xml'
  */
 @ToDataClass
 private fun getObject(c: KClass<*>, xml: XmlElement) =
@@ -80,6 +93,11 @@ private fun getObject(c: KClass<*>, xml: XmlElement) =
 
 /**
  * Converts the given string into to given primitive class object
+ *
+ * @param c the primitive type
+ * @param value the source string
+ *
+ * @return an instance of the 'c' class with the value given in 'value'
  */
 private fun getPrimitive(c: KClass<*>, value: String?): Any? = when (c) {
     String::class -> value.toString()
