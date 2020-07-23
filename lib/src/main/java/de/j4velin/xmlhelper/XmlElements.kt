@@ -53,7 +53,11 @@ sealed class XmlElement(open val name: String, open val attributes: Map<String, 
         @JvmStatic
         fun fromReader(reader: Reader) = reader.use {
             val parser: XmlPullParser = XmlPullParserFactory.newInstance().newPullParser()
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+            try {
+                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+            } catch (e: Exception) {
+                // default should already be 'false' -> ignore
+            }
             parser.setInput(it)
             readTag(parser)
         }

@@ -25,7 +25,9 @@ import org.xmlpull.v1.XmlPullParser
  */
 internal fun readTag(parser: XmlPullParser): XmlElement {
     if (parser.depth == 0) {
-        parser.next()
+        while (parser.eventType != XmlPullParser.START_TAG) {
+            parser.next()
+        }
     }
     if (parser.eventType != XmlPullParser.START_TAG) {
         throw IllegalArgumentException("Not a start tag: ${parser.eventType}")
@@ -45,7 +47,6 @@ internal fun readTag(parser: XmlPullParser): XmlElement {
             val elements = mutableListOf<XmlElement>()
             do {
                 elements.add(readTag(parser))
-                parser.next()
             } while (skipWhitespace(parser) != XmlPullParser.END_TAG)
 
             // all enclosed tags have a different name? -> map/object
