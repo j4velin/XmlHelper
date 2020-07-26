@@ -26,8 +26,14 @@ import java.io.Reader
  *
  * @property name the name of the xml tag
  * @property attributes the attributes of the xml tag
+ * @property value the value of the XmlPrimitive or null, if no value is set or the object is not a
+ *                 XmlPrimitive object
  */
-sealed class XmlElement(open val name: String, open val attributes: Map<String, String>) {
+sealed class XmlElement(
+    open val name: String,
+    open val attributes: Map<String, String>,
+    open val value: String? = null
+) {
     companion object {
         /**
          * Creates a XmlEntity from an inputstream
@@ -72,7 +78,7 @@ sealed class XmlElement(open val name: String, open val attributes: Map<String, 
 data class XmlPrimitive internal constructor(
     override val name: String,
     override val attributes: Map<String, String>,
-    val value: String?
+    override val value: String?
 ) : XmlElement(name, attributes)
 
 /**

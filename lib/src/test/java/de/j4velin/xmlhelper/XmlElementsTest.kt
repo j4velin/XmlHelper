@@ -27,7 +27,7 @@ class XmlElementsTest {
             val primitive = XmlElement.fromInputStream(it)
             assertTrue(primitive is XmlPrimitive)
             assertEquals("myTag", primitive.name)
-            assertNull((primitive as XmlPrimitive).value)
+            assertNull(primitive.value)
             assertTrue(primitive.attributes.isEmpty())
         }
     }
@@ -39,7 +39,7 @@ class XmlElementsTest {
             val primitive = XmlElement.fromInputStream(it)
             assertTrue(primitive is XmlPrimitive)
             assertEquals("myTag", primitive.name)
-            assertNull((primitive as XmlPrimitive).value)
+            assertNull(primitive.value)
             assertTrue(primitive.attributes.isEmpty())
         }
     }
@@ -70,9 +70,9 @@ class XmlElementsTest {
                 assertTrue(primitive is XmlPrimitive)
                 assertEquals("myPrimitive", primitive.name)
             }
-            assertEquals("foo", (list[0] as XmlPrimitive).value)
-            assertEquals("bar", (list[1] as XmlPrimitive).value)
-            assertEquals("foobar", (list[2] as XmlPrimitive).value)
+            assertEquals("foo", list[0].value)
+            assertEquals("bar", list[1].value)
+            assertEquals("foobar", list[2].value)
         }
     }
 
@@ -89,9 +89,9 @@ class XmlElementsTest {
                 assertTrue(primitive is XmlPrimitive)
                 assertEquals("myPrimitive", primitive.name)
             }
-            assertNull((list[0] as XmlPrimitive).value)
-            assertNull((list[1] as XmlPrimitive).value)
-            assertNull((list[2] as XmlPrimitive).value)
+            assertNull(list[0].value)
+            assertNull(list[1].value)
+            assertNull(list[2].value)
         }
     }
 
@@ -109,20 +109,15 @@ class XmlElementsTest {
                 assertEquals("myInnerList", innerList.name)
                 assertEquals(2, (innerList as XmlList).size)
             }
-            val primitive00 = (list[0] as XmlList)[0] as XmlPrimitive
-            assertEquals("foo", primitive00.value)
-            val primitive01 = (list[0] as XmlList)[1] as XmlPrimitive
-            assertEquals("bar", primitive01.value)
 
-            val primitive10 = (list[1] as XmlList)[0] as XmlPrimitive
-            assertEquals("foo2", primitive10.value)
-            val primitive11 = (list[1] as XmlList)[1] as XmlPrimitive
-            assertEquals("bar2", primitive11.value)
+            assertEquals("foo", (list[0] as XmlList)[0].value)
+            assertEquals("bar", (list[0] as XmlList)[1].value)
 
-            val primitive20 = (list[2] as XmlList)[0] as XmlPrimitive
-            assertEquals("foo3", primitive20.value)
-            val primitive21 = (list[2] as XmlList)[1] as XmlPrimitive
-            assertEquals("bar3", primitive21.value)
+            assertEquals("foo2", (list[1] as XmlList)[0].value)
+            assertEquals("bar2", (list[1] as XmlList)[1].value)
+
+            assertEquals("foo3", (list[2] as XmlList)[0].value)
+            assertEquals("bar3", (list[2] as XmlList)[1].value)
         }
     }
 
@@ -138,8 +133,8 @@ class XmlElementsTest {
             for (primitive in obj.values) {
                 assertTrue(primitive is XmlPrimitive)
             }
-            assertEquals("foobar", (obj["myStringPrimitive"] as XmlPrimitive).value)
-            assertNull((obj["myEmptyPrimitive"] as XmlPrimitive).value)
+            assertEquals("foobar", obj["myStringPrimitive"]?.value)
+            assertNull(obj["myEmptyPrimitive"]?.value)
         }
     }
 
@@ -163,12 +158,12 @@ class XmlElementsTest {
         val xmlPrimitive = xmlObject["somePrimitive"] as XmlPrimitive
         assertEquals("primitiveValue", xmlPrimitive.value)
 
-        assertNull((xmlObject["withoutValue"] as XmlPrimitive).value)
+        assertNull(xmlObject["withoutValue"]?.value)
 
         val xmlList = xmlObject["stringList"] as XmlList
         assertEquals(2, xmlList.size)
-        assertEquals("hello", (xmlList[0] as XmlPrimitive).value)
-        assertEquals("world", (xmlList[1] as XmlPrimitive).value)
+        assertEquals("hello", xmlList[0].value)
+        assertEquals("world", xmlList[1].value)
     }
 
     @Test
@@ -193,7 +188,7 @@ class XmlElementsTest {
             assertEquals(4, (obj as XmlObject).size)
 
             assertTrue(obj["myPrimitive"] is XmlPrimitive)
-            assertEquals("foobar", (obj["myPrimitive"] as XmlPrimitive).value)
+            assertEquals("foobar", obj["myPrimitive"]?.value)
 
             assertTrue(obj["myInnerObject"] is XmlObject)
             assertEquals(3, (obj["myInnerObject"] as XmlObject).size)
@@ -202,7 +197,7 @@ class XmlElementsTest {
             assertEquals(2, (obj["myList"] as XmlList).size)
 
             assertTrue(obj["myEmpty"] is XmlPrimitive)
-            assertNull((obj["myEmpty"] as XmlPrimitive).value)
+            assertNull(obj["myEmpty"]?.value)
         }
     }
 }
