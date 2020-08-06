@@ -200,4 +200,21 @@ class XmlElementsTest {
             assertNull(obj["myEmpty"]?.value)
         }
     }
+
+    @Test
+    fun listToObject() {
+        val file = File(javaClass.classLoader!!.getResource("listOfPrimitives.xml").file)
+        FileInputStream(file).use {
+            val list = XmlElement.fromInputStream(it)
+            assertTrue(list is XmlList)
+            assertTrue(list is XmlListImpl)
+
+            val obj = (list as XmlList).asXmlObject()
+
+            assertTrue(obj is XmlObject)
+            assertEquals(1, obj.size)
+            assertNotNull(obj["myPrimitive"])
+            assertTrue(obj["myPrimitive"] is XmlPrimitive)
+        }
+    }
 }

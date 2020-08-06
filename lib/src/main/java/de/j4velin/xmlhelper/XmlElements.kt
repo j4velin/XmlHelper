@@ -94,6 +94,7 @@ data class XmlObject internal constructor(
 ) : XmlList(name, attributes, map.values.toList()), Map<String, XmlElement> by map {
     override fun isEmpty() = map.isEmpty()
     override val size = map.size
+    override fun asXmlObject() = this
 }
 
 /**
@@ -103,7 +104,12 @@ internal data class XmlListImpl internal constructor(
     override val name: String,
     override val attributes: Map<String, String>,
     override val elements: List<XmlElement>
-) : XmlList(name, attributes, elements)
+) : XmlList(name, attributes, elements) {
+    override fun asXmlObject() = XmlObject(
+        name,
+        attributes,
+        elements.asSequence().distinctBy { it.name }.associateBy { it.name })
+}
 
 /**
  * Class representing a "xml collection", e.g. a XML tag enclosing multiple other tags.
@@ -114,4 +120,13 @@ sealed class XmlList(
     override val name: String,
     override val attributes: Map<String, String>,
     internal open val elements: List<XmlElement>
-) : XmlElement(name, attributes), List<XmlElement> by elements
+) : XmlElement(name, attributes), List<XmlElement> by elements {
+    /**
+     * Forces this XmlList into a XmlObject. This operation will remove items with the same name, as
+     * a XmlObject allows accessing the child elements by using the element name as key.
+     * If this element is already a XmlObject, 'this' is returned
+     *
+     * @return a XmlObject
+     */
+    abstract fun asXmlObject(): XmlObject
+}
